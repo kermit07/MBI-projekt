@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+	<title>Demostracja algorytmu Viterbiego</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="js/logic.js"></script>
+	<script type="text/javascript" src="js/visualization.js"></script>
+</head>
+
+<body onload="init()">
+	<nav class="navbar navbar-light bg-light">
+		<h2>Demostracja algorytmu Viterbiego</h2>
+	</nav>
+
+	<div class="container-fluid">
+		<div class="row">
+		    <div class="left-col col-sm">
+		    	<div class="row">
+					<div class="col-sm-9">
+						<h4>Wprowadzanie danych</h4>
+					</div>
+					<div class="dropdown col-sm-3">
+						<button class="btn btn-primary dropdown-toggle" type="button" id="sampleDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Przykłady</button>
+						<div class="dropdown-menu" aria-labelledby="sampleDropdown">
+							<a class="dropdown-item" onclick="loadSample1()">Przykład 1</a>
+							<a class="dropdown-item" onclick="loadSample2()">Przykład 2</a>
+							<a class="dropdown-item" onclick="loadSample3()">Przykład z wykładu</a>
+						</div>
+					</div>
+		    	</div>
+				<div id="stateGroup">
+				    <label>Stany:</label>
+			    	<div id="stateList" class="label-items"></div>
+			    	<div class="label-items">
+					    <input type="text" class="form-control text-input" placeholder="Dodaj stan" onkeyup="addState(event)">
+						<div class="alert alert-danger" id="addStateAlert">
+							Wartości nie mogą się powtarzać!
+						</div>
+			    	</div>
+					<hr>
+				</div>
+
+				<div id="initGroup" style="display: none">
+					<label>Inicjacja stanów</label>
+					<div id="initTable">
+					</div>
+					<hr>
+				</div>
+
+				<div id="transcriptionGroup" style="display: none">
+				    <label>Przemiana stanów:</label>
+				    <div id="stateTranscriptionTable"></div>
+					<hr>
+				</div>
+
+				<div id="eventsGroup">
+				    <label>Możliwe zdarzenie:</label>
+				    <div id="eventList" class="label-items"></div>
+			    	<div class="label-items">
+					    <input type="text" class="form-control text-input" placeholder="Dodaj zdarzenie" onkeyup="addEvent(event)">
+						<div class="alert alert-danger" id="addEventAlert">
+							Wartości nie mogą się powtarzać!
+						</div>
+					</div>
+					<hr>
+				</div>
+
+				<div id="obsGroup" style="display: none">
+				    <label>Obserwacje:</label>
+				    <div id="obsList" class="label-items"></div>
+					<hr>
+				</div>
+
+				<div id="obsProbGroup" style="display: none">
+				    <label>Prawdopodobieństwo obserwacji:</label>
+				    <div id="obsProbTable"></div>
+				</div>
+				<button type="button" class="btn btn-primary btn-block" onclick="onLoad()">Załaduj dane</button>
+
+		    </div>
+		    <div class="col-sm right-col">
+				<h4>Wizualizacja (na razie tylko konsola)</h4>
+				<div id="visualizationPanel" style="display: none;">
+					<button onclick="visNextStep()">NEXT STEP</button>
+					<button onclick="visGo()">GO</button>
+					<button onclick="visStop()">STOP</button>
+				</div>
+				<div id="emptyPanel" class="empty-panel">
+					Brak załadowanych danych
+				</div>
+		    </div>
+	  </div>
+	</div>
+
+</body>
+</html>
+
