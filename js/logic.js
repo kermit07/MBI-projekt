@@ -227,6 +227,28 @@ class Model {
 		$('#obsProbTable').append(table);
 	}
 
+	checkData() {
+        $("#obsProbTable table tbody").find('tr').each(function (rowNumber, row) {
+            var state = model.states[rowNumber];
+            $(this).find('td').each(function(colNumber, col){
+                var value = $(this).find('input').val();
+                model.obsProb[state][model.events[colNumber]] = value;
+            });
+        });
+
+        $("#initTable table tbody").find('td').each(function (rowNumber, row) {
+            model.initiation[model.states[rowNumber]] = $(this).find('input').val();
+        });
+
+        $("#stateTranscriptionTable table tbody").find('tr').each(function (rowNumber, row) {
+            var state = model.states[rowNumber];
+            $(this).find('td').each(function(colNumber, col){
+                var value = $(this).find('input').val();
+                model.statesTranscription[state][model.states[colNumber]] = value;
+            });
+        });
+    }
+
 	loadModel1() {
 		this.states = ["Healthy", "Fever"];
 		this.initiation = {};
@@ -431,6 +453,8 @@ addEvent = function(event) {
 
 onLoad = function() {
 	// TODO walidacja
+
+    model.checkData();
 	var myViterbi = new Viterbi(true);
 	var firstSet = model.getData();
 	var result = myViterbi.go(firstSet.o, firstSet.q, firstSet.pi, firstSet.a, firstSet.b);
