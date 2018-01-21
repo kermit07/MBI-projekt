@@ -1,8 +1,13 @@
 class Visualization {
-    constructor(result) {
+    constructor(result, obs) {
         this.result = result;
         this.step = 0;
-        // TODO - wyświetlenie panelu wizualizacji
+        this.obs = obs;
+        this.states = Object.keys(result[0]);
+        this.maxes = [];
+        this.maxStates = [];
+
+        this.clearAll();
     }
 
     go() {
@@ -24,18 +29,111 @@ class Visualization {
     }
 
     showActualStep() {
-        console.log("STEP " + this.step)
         if (this.step < this.result.length) {
-            console.log(this.result[this.step]) // TODO
+            this.refreshOutputTable(this.result);
         } else if(this.step == this.result.length) {
-            console.log("wyświetlenie ścieżki na diagramie") // TODO
+            this.showPath();
         } else if(this.step == this.result.length + 1) {
-            console.log("wyświetlenie wyniku") // TODO
+            this.showResult();
         } else
             clearInterval(this.loopId);
     }
 
     clearAll() {
-        // TODO
+        $('#outputTable').empty();
+        $('#resultSpan').text('');
+        this.maxes = [];
+        this.maxStates = [];
+    }
+
+    refreshOutputTable() {
+        var table = $('<table></table>').addClass('table table-sm');
+        var thead = $('<thead></thead>');
+        var theadRow = $('<tr></tr>');
+        theadRow.append($('<th></th>').attr("scope", "col"));
+
+        for (var i = 0 ; i <= this.step ; i++) {
+            var row = $('<th></th>').attr("scope", "col").text(this.obs[i]);
+            theadRow.append(row);
+        }
+        thead.append(theadRow);
+        var tbody = $('<tbody></tbody>');
+        for (var state in this.states) {
+            var row = $('<tr></tr>');
+            row.append($('<td></td>').attr("scope", "row").text(this.states[state]));
+
+            for (var i = 0 ; i <= this.step ; i++) {
+
+                var value = this.result[i][this.states[state]].prob;
+                var record = $('<td></td>').attr('id', state+'_'+i).text(value);
+                row.append(record);
+            }
+            tbody.append(row);
+        }
+
+        table.append(thead);
+        table.append(tbody);
+        $('#outputTable').empty();
+        $('#outputTable').append(table);
+    }
+
+    showPath() {
+        for (var col = this.result.length - 1; col >= 0 ; col--) {
+            var max = Number.MIN_SAFE_INTEGER;
+            for (var state in this.states) {
+                var stateName = this.states[state];
+                var currentValue = this.result[col][stateName].prob;
+                if (currentValue > max) {
+                    max = currentValue;
+                    var maxId = state+'_'+col;
+                    var maxState = this.states[state];
+                }
+            }
+            this.maxes.push(maxId);
+            this.maxStates.unshift(maxState);
+        }
+
+        var table = $('#outputTable');
+        for (var id in this.maxes) {
+            document.getElementById(this.maxes[id]).classList.add('path');
+            this.maxes.push()
+        }
+    }
+
+    showResult() {
+        $('#resultSpan').text('Wynik: ' + this.maxStates.join());
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

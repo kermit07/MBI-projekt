@@ -25,7 +25,7 @@ class Model {
 		this.refreshStateTranscriptionTable();
 		this.refreshObsPropTable();
 		this.refreshInitTable();
-	}
+    }
 
 	stateElement(ix, name) {
 		var span = $("<span></span>").text(name);
@@ -434,9 +434,8 @@ onLoad = function() {
 	var myViterbi = new Viterbi(true);
 	var firstSet = model.getData();
 	var result = myViterbi.go(firstSet.o, firstSet.q, firstSet.pi, firstSet.a, firstSet.b);
-	console.log(result);
-
-	vis = new Visualization(result);
+    console.log(result);
+	vis = new Visualization(result, model.getData().o);
 	$("#visualizationPanel").show();
 	$("#emptyPanel").hide();
 }
