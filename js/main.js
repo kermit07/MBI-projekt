@@ -27,13 +27,13 @@ class Viterbi {
 		this.log("dla kazdego ze stnow Q wstawiamy V[0]")
 		for (var q in Q) {
 			var elements = [];
-			elements[0] = $("#initTable").find("input[id='init_" + q + "']");
-			elements[1] = $("#obsProbTable").find("input[id='obsProb_" + q + "_" + 0 + "']");
+			elements[0] = $("#initTable").find("input[id='init_" + Q[q] + "']");
+			elements[1] = $("#obsProbTable").find("input[id='obsProb_" + Q[q] + "_" + O[0] + "']");
 			V[0][Q[q]] = {prob: myMul(Pi[Q[q]], B[Q[q]][O[0]]), prev: null, 
 				operation: Pi[Q[q]] + " * " + B[Q[q]][O[0]], 
 				elements: elements, 
 				comment: "tutaj dodam komentarz do wyświetlenia na dole", 
-				prevX: -1, prevY: -1};
+				prevI: -1, prevState: ''};
 			this.log("V[0]["+Q[q]+"]: " + myMul(Pi[Q[q]], B[Q[q]][O[0]]));
 		}
 		this.log("")
@@ -48,14 +48,14 @@ class Viterbi {
 				for (var j in Q) {
 					if (myMul(V[t-1][Q[j]].prob, A[Q[j]][Q[i]]) == maxTrProb) {
 						var elements = [];
-						elements[0] = $("#obsProbTable").find("input[id='obsProb_" + i + "_" + t + "']");
-						elements[1] = $("#stateTranscriptionTable").find("input[id='stateTrans_" + j + "_" + i + "']");
+						elements[0] = $("#obsProbTable").find("input[id='obsProb_" + Q[i] + "_" + O[t] + "']");
+						elements[1] = $("#stateTranscriptionTable").find("input[id='stateTrans_" + Q[j] + "_" + Q[i] + "']");
 						this.log("_Stan: " + Q[i] + ", maxProb = " + maxTrProb + ", stan poprzedni = " + Q[j])
 						V[t][Q[i]] = {prob: myMul(maxTrProb, B[Q[i]][O[t]]), prev: Q[j], 
-										operation: V[t-1][Q[j]].prob + " * " + A[Q[j]][Q[i]] + " * " + B[Q[i]][O[t]], 
+										operation: V[t-1][Q[j]].prob.toFixed(4) + " * " + A[Q[j]][Q[i]] + " * " + B[Q[i]][O[t]], 
 										elements: elements,
 										comment: "tutaj dodam komentarz do wyświetlenia na dole",
-										prevX: t-1, prevY: j};
+										prevI: t-1, prevState: Q[j]};
 						this.log("V["+t+"]["+Q[i]+"]: " + myMul(maxTrProb, B[Q[i]][O[t]]));
                      	break;
 					}
@@ -83,5 +83,4 @@ class Viterbi {
 		this.log(opt);
 		return V;
 	}
-
 }

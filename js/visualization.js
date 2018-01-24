@@ -73,15 +73,15 @@ class Visualization {
             for (var i = 0 ; i <= this.step ; i++) {
                 var res = this.result[i][this.states[state]];
                 var value = res.prob;
-                var record = $('<td></td>').attr('id', state+'_'+i);
-                var input = $('<input id="result_' + state + '_' + i + '" disabled>').addClass("form-control prob-input");
+                var record = $('<td></td>').attr('id', state + '_' + i);
+                var input = $('<input id="result_' + this.states[state] + '_' + i + '" disabled>').addClass("form-control prob-input");
                 input.val(value.toFixed(4));
 
                 record.on('click', {
                     comment: res.comment,
                     elements: res.elements,
-                    prevX: res.prevX,
-                    prevY: res.prevY
+                    prevI: res.prevI,
+                    prevState: res.prevState
                 }, this.onRecord);
                 record.append(input);
                 record.addClass('tooltipster');
@@ -104,9 +104,10 @@ class Visualization {
         for (var i = 0; i < event.data.elements.length; i++) {
             model.highlightElement(event.data.elements[i]);
         }
-        if (event.data.prevX >= 0 && event.data.prevY >= 0) {
-            model.highlightElement($("#outputTable").find("input[id='result_" + event.data.prevY + "_" + event.data.prevX + "']"));
+        if (event.data.prevState != "" && event.data.prevI >= 0) {
+            model.highlightElement($("#outputTable").find("input[id='result_" + event.data.prevState + "_" + event.data.prevI + "']"));
         }
+        console.log(event.data.elements)
     }
 
     showPath() {
@@ -117,7 +118,7 @@ class Visualization {
                 var currentValue = this.result[col][stateName].prob;
                 if (currentValue > max) {
                     max = currentValue;
-                    var maxId = state+'_'+col;
+                    var maxId = state + '_' + col;
                     var maxState = this.states[state];
                 }
             }
@@ -127,7 +128,7 @@ class Visualization {
 
         var table = $('#outputTable');
         for (var id in this.maxes) {
-            document.getElementById(this.maxes[id]).classList.add('path');
+            $("#outputTable").find("td[id='" + this.maxes[id] + "']").addClass('path');
             this.maxes.push()
         }
     }
