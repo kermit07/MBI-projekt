@@ -1,11 +1,11 @@
 class Model {
 	constructor() {
+		this.obs = [];
 		this.states = [];
 		this.initiation = {};
 		this.statesTranscription = {};
 		this.events = [];
 		this.obsProb = {};
-		this.obs = [];
 	}
 
 	getData() {
@@ -159,7 +159,7 @@ class Model {
 		var tbody = $('<tbody></tbody>');
 		var row = $('<tr></tr>');
 		for (var x in this.states) {
-			var input = $('<input type="number" step="0.1">').addClass("form-control prob-input");
+			var input = $('<input id="init_' + x + '" type="number" step="0.1">').addClass("form-control prob-input");
 			input.val(this.initiation[this.states[x]]);
 	    	var record = $('<td></td>').append(input);
 			row.append(record);
@@ -186,7 +186,7 @@ class Model {
 			var row = $('<tr></tr>');
 			row.append($('<th></th>').attr("scope", "row").text(this.states[r]));
 			for (var c in this.states) {
-				var input = $('<input type="number" step="0.1">').addClass("form-control prob-input");
+				var input = $('<input id="stateTrans_' + r + '_' + c + '" type="number" step="0.1">').addClass("form-control prob-input");
 				input.val(this.statesTranscription[this.states[r]][this.states[c]]);
 		    	var record = $('<td></td>').append(input);
 				row.append(record);
@@ -214,7 +214,7 @@ class Model {
 			var row = $('<tr></tr>');
 			row.append($('<th></th>').attr("scope", "row").text(this.states[r]));
 			for (var c in this.events) {
-				var input = $('<input type="number" step="0.1">').addClass("form-control prob-input");
+				var input = $('<input id="obsProb_' + r + '_' + c + '" type="number" step="0.1">').addClass("form-control prob-input");
 				input.val(this.obsProb[this.states[r]][this.events[c]]);
 		    	var record = $('<td></td>').append(input);
 				row.append(record);
@@ -225,6 +225,17 @@ class Model {
 		table.append(tbody);
 		$('#obsProbTable').empty();
 		$('#obsProbTable').append(table);
+	}
+
+	highlightElement(x) {
+		x.addClass("highlight");
+	}
+
+	removeAllHighlights() {
+		$("#initTable").find("input").removeClass("highlight");
+		$("#stateTranscriptionTable").find("input").removeClass("highlight");
+		$("#obsProbTable").find("input").removeClass("highlight");
+		$("#outputTable").find("input").removeClass("highlight");
 	}
 
 	checkData() {
@@ -455,13 +466,22 @@ onLoad = function() {
 	// TODO walidacja
 
     model.checkData();
-	var myViterbi = new Viterbi(true);
+	var myViterbi = new Viterbi(false);
 	var firstSet = model.getData();
 	var result = myViterbi.go(firstSet.o, firstSet.q, firstSet.pi, firstSet.a, firstSet.b);
     console.log(result);
-	vis = new Visualization(result, model.getData().o);
+	vis = new Visualization(result, model.getData().o, model);
+
+	$("#stateGroup").hide();
+	$("#eventsGroup").hide();
+
 	$("#visualizationPanel").show();
 	$("#emptyPanel").hide();
+
+}
+
+visReset = function() {
+	vis.reset();
 }
 
 visNextStep = function() {

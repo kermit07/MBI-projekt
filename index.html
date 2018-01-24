@@ -6,6 +6,9 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
+    <link rel="stylesheet" href="css/tooltipster.bundle.min.css">
+    <script type="text/javascript" src="js/tooltipster.bundle.min.js"></script>
+
 	<title>Demostracja algorytmu Viterbiego</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<script type="text/javascript" src="js/main.js"></script>
@@ -87,6 +90,7 @@
 		    <div class="col-sm right-col">
 				<h4>Wizualizacja</h4>
 				<div id="visualizationPanel" style="display: none;">
+					<button onclick="visReset()">RESET</button>
 					<button onclick="visNextStep()">NEXT STEP</button>
 					<button onclick="visGo()">GO</button>
 					<button onclick="visStop()">STOP</button>

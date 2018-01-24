@@ -102,3 +102,12 @@ h4 {
     font-weight: bold;
     background-color: #caf7d9;
 }
+
+.highlight {
+    border: 1px red solid;
+    background-color: #a4e5a6 !important;
+}
+
+#outputTable input {
+    cursor: pointer;
+}

@@ -1,13 +1,19 @@
 class Visualization {
-    constructor(result, obs) {
+    constructor(result, obs, model) {
         this.result = result;
         this.step = 0;
         this.obs = obs;
         this.states = Object.keys(result[0]);
         this.maxes = [];
         this.maxStates = [];
+        this.model = model;
 
         this.clearAll();
+    }
+
+    reset() {
+        this.step = 0;
+        this.clearAll()
     }
 
     go() {
@@ -47,6 +53,8 @@ class Visualization {
     }
 
     refreshOutputTable() {
+
+        var idPairsToHighlight
         var table = $('<table></table>').addClass('table table-sm');
         var thead = $('<thead></thead>');
         var theadRow = $('<tr></tr>');
@@ -63,9 +71,21 @@ class Visualization {
             row.append($('<td></td>').attr("scope", "row").text(this.states[state]));
 
             for (var i = 0 ; i <= this.step ; i++) {
+                var res = this.result[i][this.states[state]];
+                var value = res.prob;
+                var record = $('<td></td>').attr('id', state+'_'+i);
+                var input = $('<input id="result_' + state + '_' + i + '" disabled>').addClass("form-control prob-input");
+                input.val(value.toFixed(4));
 
-                var value = this.result[i][this.states[state]].prob;
-                var record = $('<td></td>').attr('id', state+'_'+i).text(value);
+                record.on('click', {
+                    comment: res.comment,
+                    elements: res.elements,
+                    prevX: res.prevX,
+                    prevY: res.prevY
+                }, this.onRecord);
+                record.append(input);
+                record.addClass('tooltipster');
+                record.attr('title', res.operation);
                 row.append(record);
             }
             tbody.append(row);
@@ -75,6 +95,18 @@ class Visualization {
         table.append(tbody);
         $('#outputTable').empty();
         $('#outputTable').append(table);
+
+        $('.tooltipster').tooltipster();
+    }
+
+    onRecord (event) {
+        model.removeAllHighlights();
+        for (var i = 0; i < event.data.elements.length; i++) {
+            model.highlightElement(event.data.elements[i]);
+        }
+        if (event.data.prevX >= 0 && event.data.prevY >= 0) {
+            model.highlightElement($("#outputTable").find("input[id='result_" + event.data.prevY + "_" + event.data.prevX + "']"));
+        }
     }
 
     showPath() {
@@ -104,10 +136,6 @@ class Visualization {
         $('#resultSpan').text('Wynik: ' + this.maxStates.join());
     }
 }
-
-
-
-
 
 
 
