@@ -111,3 +111,7 @@ h4 {
 #outputTable input {
     cursor: pointer;
 }
+
+#visualizationPanel a {
+    margin: 0 10px;
+}
